@@ -15,6 +15,18 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
+  socket.emit('newMessage', {
+    from: 'Admin',
+    text: 'Welcome to the chatroom',
+    createAt: new Date().getTime()
+  });
+
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'Someone have come the chatroom',
+    createAt: new Date().getTime()
+  })
+
   socket.on('createEmail', (newEmail) => {
     console.log('createEmail', newEmail);
   })
@@ -26,11 +38,16 @@ io.on('connection', (socket) => {
   socket.on('createMessage', (msg) => {
     console.log('createMessage', msg);
 
-    io.emit('newMessage', {
-      from: msg.from,
-      text: msg.text,
-      createAt: new Date().getTime()
-    })
+    // io.emit('newMessage', {
+    //   from: msg.from,
+    //   text: msg.text,
+    //   createAt: new Date().getTime()
+    // })
+    // socket.broadcast.emit('newMessage', {
+    //   from: msg.from,
+    //   text: msg.text,
+    //   createAt: new Date().getTime()
+    // });
   });
 });
 
